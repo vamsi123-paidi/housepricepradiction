@@ -1,9 +1,9 @@
 import pickle
 import preprocess
-
 import numpy as np
 import pandas as pd
 
+# Load models
 RandomForestRegressorModel = pickle.load(open('data/models/RandomForestRegressor.pkl', 'rb'))
 DecisionTreeRegressorModel = pickle.load(open('data/models/DecisionTreeRegressor.pkl', 'rb'))
 GradientBoostingRegressorModel = pickle.load(open('data/models/GradientBoostingRegressor.pkl', 'rb'))
