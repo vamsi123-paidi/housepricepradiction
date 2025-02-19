@@ -13,7 +13,7 @@ function display() {
   }
 }
 
-function clear_results(){
+function clear_results() {
   results.innerHTML = '';
 }
 
@@ -43,23 +43,21 @@ async function postData(url = "", data = {}) {
   return response.json();
 }
 
-function submit_request() {
-  clear_screen();
-  add_screen("Making request to server");
-
-  const form_data = extract_form_data();
-  add_screen(JSON.stringify(form_data));
-
-  postData("/predict", form_data).then((res) => {
-    add_screen(JSON.stringify(res));
-    display();
+function extract_form_data() {
+  const form_data = {};
+  document.querySelectorAll('.form-control, .form-select').forEach(input => {
+    form_data[input.id] = input.value;
   });
+  return form_data;
+}
 
-  display();
+function buildResults(prediction) {
+  const resultElement = document.createElement('div');
+  resultElement.innerText = `Predicted Price: $${prediction}`;
+  return resultElement;
 }
 
 function predictPrice() {
-  
   const form_data = extract_form_data();
 
   postData("http://127.0.0.1:5000/predict", form_data)
@@ -68,7 +66,24 @@ function predictPrice() {
       const resultsDataElement = buildResults(prediction);
       results.innerHTML = '';
       results.appendChild(resultsDataElement);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      results.innerHTML = 'Error making prediction';
     });
+}
+
+function convertToRupees() {
+  const resultElement = document.getElementById('results');
+  const currentText = resultElement.innerText;
+  const dollarValue = parseFloat(currentText.replace(/[^0-9.-]+/g, ''));
+
+  if (!isNaN(dollarValue)) {
+    const rupeeValue = dollarValue * 75;
+    resultElement.innerText = `₹${rupeeValue.toFixed(2)}`;
+  } else {
+    alert("The result is not in a valid dollar format or no prediction has been made yet.");
+  }
 }
 
 const form_ids = [

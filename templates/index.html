@@ -86,18 +86,19 @@
     }
 
     #form-section {
-      background-image: url("/static/images/background1.jpg");
-      background-size: cover;
-      background-position: center;
+      background-image: url("/static/images/background3.jpg");
+      background-size: cover; /* Ensures the image covers the entire section */
+      background-position: center; /* Centers the image */
+      background-attachment: fixed; /* Optional: Makes the background fixed while scrolling */
       border-radius: 1rem;
       box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
-      padding: 2rem;
-      margin: 2rem auto;
-      max-width: 800px;
+      padding: 4rem 2rem; /* Increased padding for better spacing */
+      margin: 2rem 0; /* Remove auto margin to make it full width */
+      width: 100%; /* Ensure it takes full width */
       animation: fadeIn 1s ease-in-out;
       position: relative;
     }
-
+    
     #form-section::before {
       content: "";
       position: absolute;
@@ -109,12 +110,14 @@
       border-radius: 1rem;
       z-index: 1;
     }
-
+    
     #form-section .container {
       position: relative;
       z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
     }
-
+    
     #form-section h3 {
       font-size: 2rem;
       font-weight: bold;
@@ -287,10 +290,10 @@ footer a:hover {
 <body>
   <nav class="navbar navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">House Price Predictor</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar">
+      <a class="navbar-brand me-auto" href="#">House Price Predictor</a> 
+      <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar">
         <span class="navbar-toggler-icon"></span>
-      </button>
+      </button> 
       <div class="offcanvas offcanvas-end text-bg-dark" id="offcanvasDarkNavbar">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title">House Price Predictor</h5>
@@ -314,7 +317,6 @@ footer a:hover {
       </div>
     </div>
   </nav>
-
   <section id="home">
     <div class="container">
       <h2>House Price Predictor</h2>
@@ -390,6 +392,7 @@ footer a:hover {
             <div class="btn-group d-flex justify-content-center gap-3">
               <button type="button" class="btn btn-primary" onclick="predictPrice()">Predict Price</button>
               <button type="button" class="btn btn-secondary" onclick="clear_results()">Clear</button>
+              <button type="button" class="btn btn-info" onclick="convertToRupees()">Convert to Rupees</button>
             </div>
           </div>
         </div>
@@ -410,6 +413,18 @@ footer a:hover {
       const section = document.getElementById(sectionId);
       if (section) {
         section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function convertToRupees() {
+      const resultElement = document.getElementById('results');
+      const currentText = resultElement.innerText;
+      if (currentText.includes('$')) {
+        const dollarValue = parseFloat(currentText.replace('$', ''));
+        const rupeeValue = dollarValue * 75;
+        resultElement.innerText = `₹${rupeeValue.toFixed(2)}`;
+      } else {
+        alert("The result is already in rupees or no prediction has been made yet.");
       }
     }
 
